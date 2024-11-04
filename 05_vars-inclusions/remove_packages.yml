@@ -1,0 +1,5 @@
+---
+- name: 1) Remove packages
+  ansible.builtin.yum:
+    - name: "{{ packages}}"
+      state: absent

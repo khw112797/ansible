@@ -1,0 +1,46 @@
+---
+- name: 0) 관리 서버에 유저 생성 및 환경파일 설정
+  hosts: all
+  vars_files:
+    - vars/vars
+  tasks:
+    - name: 1) 유저추가 - developer
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        password: "{{ item.pw | password_hash('sha512') }}"
+        group: wheel
+      with_items: "{{ newusers }}"
+
+    - name: 2) 키 배포
+      ansible.posix.authorized_key:
+        user: developer
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+    - name: 3) sudo 명령어를 수행할 수 있도록 설정
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/developer
+        content: "developer ALL=(ALL) NOPASSWD: ALL\n"
+        mode: '0644'
+
+    - name: 3) sudoers 파일 설정
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        line: "%wheel ALL=(ALL) NOPASSWD: ALL"
+        state: present
+        validate: '/usr/sbin/visudo -cf %s'
+
+    - name: 4) 사용자 환경 세팅 - ~/.bashrc
+      ansible.builtin.template:
+        src: bashrc/bashrc/bashrc.j2
+        dest: /home/developer/.bashrc
+        owner: developer
+        group: developer
+        mode: '0644'
+
+    - name: 5) 디렉토리 복사 - $HOME/.local/share/blesh/
+      ansible.builtin.copy:
+        src: files/blesh
+        dest: /home/developer/.local/share/
+        owner: developer
+        group: developer

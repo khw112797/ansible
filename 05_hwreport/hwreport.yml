@@ -1,0 +1,35 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: create /root/hwreport.txt
+    copy:
+      src: files/hwreport.txt
+      dest: /root/hwreport.txt
+      owner: root
+      group: root
+      mode: '0400'
+
+  - name: replace ansiblehostname - {{ ansible_hostname }}
+    replace:
+      path: /root/hwreport.txt
+      regexp: 'inventoryhostname'
+      replace: "{{ ansible_hostname }}"
+
+  - name: replace totalmem - {{ ansible_memtotal_mb|string }}
+    replace:
+      path: /root/hwreport.txt
+      regexp: 'totalmem'
+      replace: "{{ ansible_memtotal_mb|string }}"
+ 
+  - name: replace biosversion - {{ ansible_bios_version }}
+    replace:
+      path: /root/hwreport.txt
+      regexp: 'biosversion'
+      replace: "{{ ansible_bios_version }}"
+
+  - name: replace sdasize - {{ ansible_devices.sda.size }}
+    replace:
+      path: /root/hwreport.txt
+      regexp: 'sdasize'
+      replace: "{{ ansible_devices.sda.size }}"

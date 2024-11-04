@@ -1,0 +1,41 @@
+---
+- name: Restore playbook
+  hosts: webservers
+  vars_files:
+    - vars/vars.yml
+  tasks:
+    ############################
+    # 1) 방화벽 포트 제거 - http, https
+    # 2) 웹 서버 설정 삭제
+    #   * /etc/pki/tls/certs/localhost.crt
+    #   * /etc/pki/tls/private/localhost.key
+    #   * /var/www/html/index.html
+    # 3) 웹 서버 기동 해제 - httpd, firewalld
+    # 4) 웹 서버 패키지 제거 - httpd, mod_ssl
+    ############################
+  - name: 1) 방화벽 포트 제거
+    ansible.posix.firewalld:
+      service: "{{ item }}"
+      permanent: true
+      immediate: true
+      state: disabled
+    loop: "{{ firewall_services }}"
+
+  - name: 2) 웹 서버 설정 삭제
+    ansible.builtin.file:
+      path: "{{ item.dest }}"
+      state: absent
+    loop: "{{ web_config_files }}"
+
+  - name: 3) 웹 서버 기동 해제 - httpd, firewalld
+    ansible.builtin.service:
+      name: "{{ item }}"
+      state: stopped
+    loop: "{{ services }}"
+
+  - name: 4) 웹 서버 패키지 제거 - httpd, mod_ssl
+    ansible.builtin.yum:
+      name:
+        - httpd
+        - mod_ssl
+      state: absent

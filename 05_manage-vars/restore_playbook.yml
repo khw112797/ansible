@@ -1,0 +1,29 @@
+---
+- name: Restore playbook.yml
+  hosts: lamp
+  vars:
+    firewall: firewalld
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: Remove file
+      ansible.builtin.file:
+        path: "{{ web_root}}/index.html"
+        state: absent
+    - name: Remove port
+      ansible.posix.firewalld:
+        service: "{{ fw_port }}"
+        permanent: true
+        immediate: true
+        state: disabled
+    - name: Stop firewalld
+      ansible.builtin.service:
+        name: "{{ firewall }}"
+        state: stopped
+    - name: Remove packages
+      ansible.builtin.yum:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - httpd
+        - mariadb-server

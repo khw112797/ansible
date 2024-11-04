@@ -1,0 +1,8 @@
+---
+- name: 0) /etc/motd 파일 배포
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: 1) /etc/motd 파일 제거
+      ansible.builtin.shell:
+        cmd: '> /etc/motd'

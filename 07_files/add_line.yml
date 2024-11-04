@@ -1,0 +1,9 @@
+---
+- name: 0) 모듈 테스트 -linefile
+  hosts: all
+  tasks:
+    - name: 1) 파일에 라인 추가
+      ansible.builtin.lineinfile:
+        path: /home/devops/users.txt
+        line: '문장추가'
+        state: present

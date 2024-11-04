@@ -1,0 +1,6 @@
+---
+- name: Installs {{ packages.web_pkg }}
+  ansible.builtin.yum:
+    name: "{{ packages.web_pkg }}"
+    state: present
+

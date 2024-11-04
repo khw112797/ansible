@@ -1,0 +1,9 @@
+cat << EOF > ansible.cfg
+[defaults]
+inventory = ./inventory
+remote_user = ansible
+
+[privilege-escalation]
+become = true
+
+vi inventory

@@ -1,0 +1,8 @@
+---
+- name: 0) SELinux 활성화
+  hosts: all
+  tasks:
+    - name: 1) SELinux 활성화
+      ansible.posix.selinux:
+        policy: targeted
+        state: enforcing

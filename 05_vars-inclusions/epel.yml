@@ -1,0 +1,15 @@
+---
+- name: Install package
+  hosts: all
+  tasks:
+    - name: Install epel-release
+      ansible.builtin.include_tasks: install_package.yml
+      vars:
+        packages:
+          web_pkg: epel-release
+    - name: Install boxes
+      ansible.builtin.include_tasks: install_package.yml
+      vars:
+        packages:
+          web_pkg: boxes
+

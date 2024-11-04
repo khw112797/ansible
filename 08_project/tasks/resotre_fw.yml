@@ -1,0 +1,12 @@
+---
+- name: 방호바겨 서비스 중지 및 포트 제거
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: disabled
+  loop: "{{ rules }}"
+- name: 방화벽 중지
+  ansible.builtin.systemd:
+    name: "{{ service }}"
+    state: stopped

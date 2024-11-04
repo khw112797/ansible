@@ -1,0 +1,22 @@
+---
+# tasks file for roles/myfirewall
+###################################
+# 1) 방화벽 패키지 설치
+# 2) 방화벽 서비스 기동
+###################################
+- name: 1) 방화벽 패키지 설치
+  ansible.builtin.yum:
+    name: firewalld
+    state: present
+- name: 2) 방화벽 서비스 기동
+  ansible.builtin.service:
+    name: firewalld
+    enabled: true
+    state: started
+- name: 방화벽 포트 등록
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop: "{{ web_rules }}"

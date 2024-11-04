@@ -1,0 +1,10 @@
+---
+- name: Remove
+  hosts: all
+  tasks:
+    - name: Remove
+      ansible.builtin.include_tasks: remove_packages.yml
+      vars:
+        packages:
+          - httpd
+          - tomcat

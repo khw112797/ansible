@@ -1,0 +1,19 @@
+---
+- name: 1) 모든 서버 파워 종료
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: 1) 관리 서버 전원 끄기
+      community.general.shutdown:
+        delay: 1
+      ignore_errors: true
+
+- name: Poweroff
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: 1) 전원 끄기 2
+      ansible.posix.at:
+        command: poweroff
+        count: 1
+        units: minutes

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# ansible.cfg
+cat << EOF > ansible.cfg
+[defaults]
+inventory = ./inventory
+remote_user = ansible
+
+[privilege_escalation]
+become = true
+become_method = sudo
+become_user = root
+becom_ask_pass = false
+
+EOF
+
+# inventory
+cat << EOF > inventory
+
+
+EOF
+
+# playbook.yml 
+cat << EOF > playbook.yml
+
+
+EOF
+

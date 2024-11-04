@@ -1,0 +1,13 @@
+---
+- name: 1) 모든 서버에 유저 생성
+  hosts: devservers
+  remote_user: devops
+  become: true
+  vars_files:
+    - vars/secret.yml
+  tasks:
+    - name: 2)  secret.yml에 유저 생성하기
+      user:
+        name: "{{ item.name }}"
+      with_items: "{{ newusers }}"
+      

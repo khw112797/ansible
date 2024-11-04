@@ -1,0 +1,12 @@
+---
+# Task file:
+  - name: 1) 웹서버 패키지 설치 - {{ packages }}
+    ansible.builtin.yum:
+      name: "{{ packages }}"
+      state: present
+
+  - name: 2) 서비스 기동 - "{{ service }}"
+    ansible.builtin.systemd:
+      name: "{{ service }}"
+      enabled: true
+      state: started

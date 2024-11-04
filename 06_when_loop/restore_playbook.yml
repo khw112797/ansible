@@ -1,0 +1,19 @@
+---
+- name: Restore playbook
+  hosts: all
+  vars:
+    mariadb_packages:
+      - mariadb-server
+      - python3-PyMySQL
+
+  tasks:
+    - name: Disable servcie
+      ansible.builtin.service:
+        name: mariadb
+        state: stopped
+
+    - name: Remove packages
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ mariadb_packages }}"

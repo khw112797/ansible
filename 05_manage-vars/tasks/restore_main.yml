@@ -1,0 +1,21 @@
+---
+###############################
+# 1) 서비스 패키지 설치 - mariadb-server, httpd
+# 2) 서비스 기동 - mariadb, httpd
+###############################
+
+- name: Start the database and web servers
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: true
+  loop: 
+    - "{{ ansible_local.custom.services.db_service }}"
+    - "{{ ansible_local.custom.services.web_service }}"
+
+- name: Install the database and web servers
+  ansible.builtin.yum:
+    name:
+      - "{{ ansible_local.custom.packages.db_package }}"
+      - "{{ ansible_local.custom.packages.web_package }}"
+    state: absent
